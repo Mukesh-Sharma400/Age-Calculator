@@ -1,9 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import styled from "styled-components";
 import ArrowDownwardRoundedIcon from "@mui/icons-material/ArrowDownwardRounded";
 
 export default function Home() {
+  const [day, setDay] = useState("");
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+  const [age, setAge] = useState({ years: 0, months: 0, days: 0 });
+
+  const handleDayChange = (e) => {
+    setDay(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setMonth(e.target.value);
+  };
+
+  const handleYearChange = (e) => {
+    setYear(e.target.value);
+  };
+
+  const calculateAge = () => {
+    if (day && month && year) {
+      const birthDate = new Date(year, month - 1, day);
+      const currentDate = new Date();
+
+      const ageInMilliseconds = currentDate - birthDate;
+      const ageInYears = Math.floor(
+        ageInMilliseconds / (365.25 * 24 * 60 * 60 * 1000)
+      );
+      const ageInMonths = Math.floor(ageInYears * 12);
+      const ageInDays = Math.floor(ageInMilliseconds / (24 * 60 * 60 * 1000));
+
+      let years = ageInYears;
+      let months = ageInMonths - ageInYears * 12;
+      let days = ageInDays - ageInYears * 365 - months * 30;
+
+      if (days > 30) {
+        months += Math.floor(days / 30);
+        days = days % 30;
+      }
+      if (months > 12) {
+        years += Math.floor(months / 12);
+        months = months % 12;
+      }
+
+      setAge({
+        years,
+        months,
+        days,
+      });
+    }
+  };
+
   return (
     <DisplayWrapper>
       <FormWrapper>
@@ -11,42 +62,42 @@ export default function Home() {
           <ColWrapper>
             <Label>Day</Label>
             <DateContainer>
-              <Input>26</Input>
+              <Input value={day} onChange={handleDayChange} />
             </DateContainer>
             <ErrorMessage>Must be a valid day</ErrorMessage>
           </ColWrapper>
           <ColWrapper>
             <Label>Month</Label>
             <DateContainer>
-              <Input>06</Input>
+              <Input value={month} onChange={handleMonthChange} />
             </DateContainer>
             <ErrorMessage>Must be a valid month</ErrorMessage>
           </ColWrapper>
           <ColWrapper>
             <Label>Year</Label>
             <DateContainer>
-              <Input>2001</Input>
+              <Input value={year} onChange={handleYearChange} />
             </DateContainer>
             <ErrorMessage>Must be a valid year</ErrorMessage>
           </ColWrapper>
         </InputDataWrapper>
         <DividerWrapper>
           <Divider />
-          <CalculateBtn>
+          <CalculateBtn onClick={calculateAge}>
             <ArrowDownIcon />
           </CalculateBtn>
         </DividerWrapper>
         <OutputDataWrapper>
           <OutputRow>
-            <OutputNum>--</OutputNum>
+            <OutputNum>{age.years ? age.years : "--"}</OutputNum>
             <OutputText>years</OutputText>
           </OutputRow>
           <OutputRow>
-            <OutputNum>--</OutputNum>
+            <OutputNum>{age.months ? age.months : "--"}</OutputNum>
             <OutputText>months</OutputText>
           </OutputRow>
           <OutputRow>
-            <OutputNum>--</OutputNum>
+            <OutputNum>{age.days ? age.days : "--"}</OutputNum>
             <OutputText>days</OutputText>
           </OutputRow>
         </OutputDataWrapper>
@@ -134,11 +185,17 @@ const DateContainer = styled.div`
   }
 `;
 
-const Input = styled.p`
+const Input = styled.textarea`
   margin: 0;
+  padding: 0;
   background: #ffffff;
   font-size: 20px;
   font-weight: bold;
+  resize: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 24px;
 `;
 
 const ErrorMessage = styled.p`
@@ -175,6 +232,7 @@ const Divider = styled.hr`
 const CalculateBtn = styled.button`
   outline: none;
   border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
