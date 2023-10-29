@@ -9,6 +9,9 @@ export default function Home() {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [age, setAge] = useState({ years: 0, months: 0, days: 0 });
+  const [dayError, setDayError] = useState("");
+  const [monthError, setMonthError] = useState("");
+  const [yearError, setYearError] = useState("");
 
   const handleDayChange = (e) => {
     setDay(e.target.value);
@@ -23,35 +26,65 @@ export default function Home() {
   };
 
   const calculateAge = () => {
-    if (day && month && year) {
-      const birthDate = new Date(year, month - 1, day);
-      const currentDate = new Date();
+    setDayError("");
+    setMonthError("");
+    setYearError("");
 
-      const ageInMilliseconds = currentDate - birthDate;
-      const ageInYears = Math.floor(
-        ageInMilliseconds / (365.25 * 24 * 60 * 60 * 1000)
-      );
-      const ageInMonths = Math.floor(ageInYears * 12);
-      const ageInDays = Math.floor(ageInMilliseconds / (24 * 60 * 60 * 1000));
+    if (!year) {
+      setYearError("Year is required");
+    }
+    if (!month) {
+      setMonthError("Month is required");
+    }
+    if (!day) {
+      setDayError("Day is required");
+    }
 
-      let years = ageInYears;
-      let months = ageInMonths - ageInYears * 12;
-      let days = ageInDays - ageInYears * 365 - months * 30;
+    if (year && month && day) {
+      if (year > new Date().getFullYear()) {
+        setYearError("Must be a valid year");
+      } else if (month > 12) {
+        setMonthError("Must be a valid month");
+      } else if (
+        day > 31 ||
+        (day > 30 && [4, 6, 9, 11].includes(parseInt(month, 10))) ||
+        (day > 29 && parseInt(month, 10) === 2)
+      ) {
+        setDayError("Must be a valid day");
+      } else {
+        setDayError("");
+        setMonthError("");
+        setYearError("");
 
-      if (days > 30) {
-        months += Math.floor(days / 30);
-        days = days % 30;
+        const birthDate = new Date(year, month - 1, day);
+        const currentDate = new Date();
+
+        const ageInMilliseconds = currentDate - birthDate;
+        const ageInYears = Math.floor(
+          ageInMilliseconds / (365.25 * 24 * 60 * 60 * 1000)
+        );
+        const ageInMonths = Math.floor(ageInYears * 12);
+        const ageInDays = Math.floor(ageInMilliseconds / (24 * 60 * 60 * 1000));
+
+        let years = ageInYears;
+        let months = ageInMonths - ageInYears * 12;
+        let days = ageInDays - ageInYears * 365 - months * 30;
+
+        if (days > 30) {
+          months += Math.floor(days / 30);
+          days = days % 30;
+        }
+        if (months > 12) {
+          years += Math.floor(months / 12);
+          months = months % 12;
+        }
+
+        setAge({
+          years,
+          months,
+          days,
+        });
       }
-      if (months > 12) {
-        years += Math.floor(months / 12);
-        months = months % 12;
-      }
-
-      setAge({
-        years,
-        months,
-        days,
-      });
     }
   };
 
@@ -60,25 +93,25 @@ export default function Home() {
       <FormWrapper>
         <InputDataWrapper>
           <ColWrapper>
-            <Label>Day</Label>
-            <DateContainer>
+            <Label error={dayError}>Day</Label>
+            <DateContainer error={dayError}>
               <Input value={day} onChange={handleDayChange} />
             </DateContainer>
-            <ErrorMessage>Must be a valid day</ErrorMessage>
+            <ErrorMessage>{dayError}</ErrorMessage>
           </ColWrapper>
           <ColWrapper>
-            <Label>Month</Label>
-            <DateContainer>
+            <Label error={monthError}>Month</Label>
+            <DateContainer error={monthError}>
               <Input value={month} onChange={handleMonthChange} />
             </DateContainer>
-            <ErrorMessage>Must be a valid month</ErrorMessage>
+            <ErrorMessage>{monthError}</ErrorMessage>
           </ColWrapper>
           <ColWrapper>
-            <Label>Year</Label>
-            <DateContainer>
+            <Label error={yearError}>Year</Label>
+            <DateContainer error={yearError}>
               <Input value={year} onChange={handleYearChange} />
             </DateContainer>
-            <ErrorMessage>Must be a valid year</ErrorMessage>
+            <ErrorMessage>{yearError}</ErrorMessage>
           </ColWrapper>
         </InputDataWrapper>
         <DividerWrapper>
@@ -159,6 +192,7 @@ const Label = styled.p`
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 2px;
+  color: ${(props) => (props.error ? "red" : "black")};
   @media (max-width: 376px) {
     font-size: 9px;
   }
@@ -168,7 +202,7 @@ const Label = styled.p`
 `;
 
 const DateContainer = styled.div`
-  border: 1.3px solid lightgrey;
+  border: 1.3px solid ${(props) => (props.error ? "red" : "lightgrey")};
   background: #ffffff;
   width: 85px;
   border-radius: 5px;
@@ -200,14 +234,18 @@ const Input = styled.textarea`
 
 const ErrorMessage = styled.p`
   margin: 0;
+  color: red;
   background: #ffffff;
   font-size: 10px;
   font-style: italic;
+  min-height: 15px;
   @media (max-width: 376px) {
     font-size: 9px;
+    min-height: 14px;
   }
   @media (max-width: 321px) {
     font-size: 8px;
+    min-height: 13px;
   }
 `;
 

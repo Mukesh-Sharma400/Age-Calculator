@@ -1,37 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Age Calculator App
+
+![Age Calculator App](./screenshot.png)
+
+## Description
+
+The Age Calculator App is a sleek and efficient application, leveraging the power of Next.js, Material UI, and Styled Components. This cutting-edge app offers users a seamless experience, allowing them to calculate a person's age effortlessly based on their birth-date. With its clean and intuitive interface, the Age Calculator App simplifies the age calculation process, making it an excellent choice for users of all age groups. Whether you're determining your own age or that of someone else, this app ensures swift and precise age calculations while maintaining a contemporary and user-friendly design.
+
+## Features
+
+- Calculate age based on a person's birth-date effortlessly.
+- Customize date format and calculate age in years, months, or days.
+- User-friendly interface for intuitive age calculations.
+- Supports calculating the age of individuals of all ages, from newborns to senior citizens.
+- Precise and accurate age calculation results.
+- Modern design with a responsive layout for a seamless experience on various devices, ensuring you can calculate age conveniently on both your mobile device and desktop.
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org/): A React framework for building server-rendered React applications.
+- [Material UI](https://material-ui.com/): A popular React UI framework for designing modern and responsive user interfaces.
+- [Styled Components](https://styled-components.com/): A library for styling React components with CSS-in-JS.
 
 ## Getting Started
 
-First, run the development server:
+To run the Age Calculator App locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository to your local machine:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   git clone https://github.com/Mukesh-Sharma400/Age-Calculator.git
+   ```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2. Install all dependencies by navigating to the project's root directory and running the following command:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. Start the project by running the following command into the project's root directory:
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-"# Age-Calculator" 
+   ```bash
+   npm start
+   ```
